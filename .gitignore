@@ -1,0 +1,12 @@
+# Composer でインストールされるライブラリ（composer install で復元）
+/vendor/
+
+# 秘密情報（.env.example をコピーして作る）
+.env
+
+# ログ・OS・エディタが作るファイル
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

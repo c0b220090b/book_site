@@ -1,0 +1,17 @@
+{
+    "name": "fsm/book_site",
+    "description": "A bookstore website project of fsm lab.",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Fsm\\BookSite\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "isak"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}

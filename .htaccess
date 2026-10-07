@@ -1,0 +1,5 @@
+# 設定ファイルや .env をブラウザから見られないようにする
+# （docker-compose.yml でプロジェクト全体を /var/www/html にマウントしているため）
+<FilesMatch "(^\.|\.(sql|yml|yaml|lock|md)$|^(Dockerfile|composer\.json)$)">
+    Require all denied
+</FilesMatch>

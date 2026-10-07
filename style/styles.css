@@ -1,0 +1,104 @@
+
+/* フォント調整 */
+/* デフォルトは見やすいフォントにする */
+/* 全体の背景アニメーション */
+body {
+    font-family: 'Press Start 2P', cursive;
+    background: url('bg_image/bg_mario.png') repeat-x;
+    background-size: cover;
+    background-repeat: repeat-x;
+    background-color: #222; /* 背景が足りない部分も暗くする */
+    animation: scroll-background 60s linear infinite;
+    color: white;
+    margin: 0;
+    padding: 2rem;
+    overflow-x: hidden;
+  }  
+  
+  /* NES風タイトル */
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #00ffcc;
+  }
+  
+  /* 背景スクロールアニメーション */
+  @keyframes scroll-background {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: -2000px 0;
+    }
+  }
+  
+  /* NESらしさが必要な場所だけ Press Start 2P を使う */
+  .nes-font {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+  }
+    
+  /* NESコンテナをダーク背景に */
+  .nes-container {
+    background-color: #2a2a2a !important;
+    color: #e0e0e0;
+  }
+  
+  /* ボタンの調整 */
+  .nes-btn {
+    border-color: #4da6ff;
+    color: #ffffff;
+  }
+  
+  .nes-btn.is-primary {
+    background-color: #4da6ff;
+  }
+  
+  .nes-btn:hover {
+    background-color: #3399ff;
+  }
+  
+  /* 入力欄の調整 */
+  .nes-input,
+  .nes-textarea {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border-color: #555;
+  }
+  
+  /* チェックボックス・ラジオボタン */
+  .nes-checkbox:checked + span,
+  .nes-radio:checked + span {
+    color: #4da6ff;
+  }
+  
+  /* 書籍ボックス */
+  .book {
+    background-color: #2c2c2c;
+    border: 2px solid #4da6ff;
+    padding: 16px;
+    margin: 12px 0;
+    border-radius: 8px;
+  }
+  
+  /* リンクの見た目 */
+  a {
+    color: #4da6ff;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* タイトルなど */
+  h2, h3 {
+    color: #ffffff;
+    margin-bottom: 1em;
+  }
+  /* .title {
+    background-color: #1e1e1e !important;
+    color: #ffffff !important;
+    padding: 8px;
+  } */
+  

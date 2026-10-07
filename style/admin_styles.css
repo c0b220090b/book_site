@@ -1,0 +1,73 @@
+/* styles.css */
+body {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  font-family: 'Segoe UI', sans-serif;
+  padding: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #2a2a2a;
+}
+
+table th, table td {
+  border: 1px solid #555;
+  padding: 10px;
+  text-align: center;
+  color: #f0f0f0;
+}
+
+table th {
+  background-color: #444;
+}
+
+a {
+  color: #4da6ff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+form {
+  background-color: #2a2a2a;
+  padding: 15px;
+  border-radius: 8px;
+  max-width: 400px;
+  margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 8px;
+  margin: 8px 0;
+  background-color: #3a3a3a;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 4px;
+}
+
+button {
+  background-color: #4da6ff;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #3399ff;
+}
+
+div.book {
+  background-color: #2a2a2a;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 6px;
+}

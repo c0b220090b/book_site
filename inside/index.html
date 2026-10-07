@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISBNスキャン - Book System</title>
+    <link href="https://unpkg.com/nes.css/css/nes.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #212529;
+            color: white;
+            padding: 20px;
+            font-family: "MS Gothic", "Orbitron", sans-serif;
+            margin: 0;
+            display: block;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 400px;
+            width: 100%;
+            margin: 0; 
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        #preview {
+            width: 100%;
+            height: auto;
+            border: 4px solid #fff;
+            background-color: #000;
+        }
+        .result-area {
+            margin-top: 15px;
+            min-height: 60px;
+            padding: 10px !important;
+            font-size: 0.8rem;
+        }
+        .back-link {
+            text-decoration: none;
+            padding: 5px 10px !important;
+            font-size: 0.7rem;
+        }
+        h2 { font-size: 1rem !important; }
+        .title { font-size: 0.7rem !important; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2 class="nes-text is-primary" style="margin: 0;">SCANNER</h2>
+            <a href="../index.php" class="nes-btn back-link">戻る</a>
+        </div>
+
+        <div class="nes-container is-dark with-title" style="padding: 10px;">
+            <p class="title">Video Feed</p>
+            <video id="preview" playsinline></video>
+        </div>
+
+        <div class="nes-container is-dark result-area">
+            <p id="result" class="nes-text" style="margin-bottom: 0;">バーコードを映してください</p>
+        </div>
+    </div>
+
+    <script type="module">
+        //import { BrowserMultiFormatReader } from 'https://cdn.jsdelivr.net/npm/@zxing/browser@0.0.10/+esm';
+	// 1. ライブラリから BarcodeFormat も一緒にインポートする
+	import { BrowserMultiFormatReader, BarcodeFormat } from 'https://cdn.jsdelivr.net/npm/@zxing/browser@0.0.10/+esm';
+
+	// 2. 読み取り対象を EAN_13（日本の書籍バーコードの規格）だけに絞る設定を作る
+	const hints = new Map();
+	hints.set(2, [BarcodeFormat.EAN_13]); // 2 はライブラリ内部の DecodeHintType.POSSIBLE_FORMATS に相当します
+
+	// 3. 設定（hints）を渡してリーダーを初期化
+	const codeReader = new BrowserMultiFormatReader(hints);
+	const videoElem = document.getElementById('preview');
+
+        // const codeReader = new BrowserMultiFormatReader();
+        // const videoElem = document.getElementById('preview');
+        const resultElem = document.getElementById('result');
+
+        // registerBook という名前で関数化しておくと、「はい」を押したときに再送しやすいです
+        const registerBook = (isbn, force = false) => {
+            fetch('save_book.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ isbn: isbn, force: force })
+            })
+            .then(res => res.text())
+            .then(data => {
+                // 文字列の前後にある空白を削除
+                data = data.trim();
+                console.log("レスポンス:", data); // ← これ超重要
+
+                if (data.includes("DUPLICATE:")) {
+                    // --- 重複合図を受け取った場合 ---
+                    const bookTitle = data.replace("DUPLICATE:", "");
+                    
+                    // 確認ダイアログを表示
+                    const answer = confirm(`「${bookTitle}」は既に登録されています。\nもう一冊登録しますか？`);
+                    
+                    if (answer) {
+                        // 「はい」なら forceフラグを true にして自分自身をもう一度呼ぶ
+                        registerBook(isbn, true);
+                    } else {
+                        // 「いいえ」ならリダイレクト
+                        alert("登録をキャンセルしました。");
+                        window.location.href = "../index.php";
+                    }
+
+                } else if (data === "OK") {
+                    // --- 成功した場合 ---
+                    alert("登録が完了しました！");
+                    window.location.href = "../index.php";
+
+                } else {
+                    // --- エラー（書籍なし、DBエラー等）の場合 ---
+                    alert(data);
+                    alert("登録をキャンセルしました。");
+                    window.location.href = "../index.php";
+                }
+            })
+            .catch(err => {
+                console.error('送信エラー:', err);
+            });
+        };
+
+        // スキャン成功時の呼び出し部分
+        let isProcessing = false;
+
+        codeReader.decodeFromVideoDevice(null, videoElem, (result, err) => {
+            if (result && !isProcessing) {
+                isProcessing = true; // ← ここ重要
+                const isbn = result.text;
+                console.log("スキャン:", isbn); // ← ここ！！
+                registerBook(isbn);
+                codeReader.reset();
+            }
+        });
+    </script>
+</body>
+</html>
